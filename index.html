@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Game Math of Bubbles</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Hanalei+Fill" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery.js"></script>
+
+    <div id="soundsEffects">
+        <audio controls id="bubbleChange">
+                <source src = "soundsEffects/bubbleChange.wav" type = "audio/wav">
+        </audio>
+        <audio controls id="bubbleChangePosition">
+                <source src = "soundsEffects/bubbleChangePosition.mp3" type = "audio/mp3">
+        </audio>
+        <audio controls id="otherDie">
+                <source src = "soundsEffects/otherDie.wav" type = "audio/wav">
+        </audio>
+        <audio controls id="getPoint">
+                <source src = "soundsEffects/getPoint.wav" type = "audio/wav">
+        </audio>
+        <audio controls id="dieGame">
+                <source src = "soundsEffects/dieGame.mp3" type = "audio/mp3">
+        </audio>
+    </div>
+
+</head>
+
+<body>
+    <header>
+    </header>
+    <div id="wrapper">
+        <div id="divName">
+            <form action="#" method="get">
+                <label for="name" id="label_name">Name</label>
+                <input type="text" name="name" id="name" pattern="[A-Za-z0-9]{3,}" required>
+                <label id="labelName">You must add minimum 3 characters</label>
+                <button id="btn_accept" class="move">Accept</button>
+                <script type="text/javascript">
+                    $("#labelName").hide();
+
+                    $("#name").blur(function() {
+                        if ($(this).is(':invalid')) {
+                            $("#labelName").show();
+                        } else {
+                            $("#labelName").hide();
+                        }
+                    });
+                </script>
+            </form>
+
+            <section id="instructions">
+                <div class="divInstructions">
+                    <h2>Instrucciones:</h2>
+                    <p>Números: Escriben la respuesta</p>
+                    <p>Retroceso: Borra el último carácter</p>
+                    <p>Intro: Confirma la respuesta</p>
+                    <p>Guión: Cambia el signo de la respuesta</p>
+                    <p>Espacio: Selecciona la burbuja que está más para abajo</p>
+                    <p>Arriba: Mueve a la burbuja de arriba</p>
+                    <p>Abajo: Mueve a la burbuja de abajo</p>
+                    <p>Izquierda: Mueve a la burbuja de la izquierda</p>
+                    <p>Derecha: Mueve a la burbuja de la derecha</p>
+                </div>
+
+                <div class="divInstructions">
+                    <h2>Instructions:</h2>
+                    <p>Numbers: Write the answer</p>
+                    <p>Backspace: Removes the last character</p>
+                    <p>Enter: Confirms the answer</p>
+                    <p>Slash: Changes the sign of the answer</p>
+                    <p>Space: Selects the bubble that is most down</p>
+                    <p>Arrow up: Moves to the up bubble</p>
+                    <p>Arrow down: Moves to the down bubble</p>
+                    <p>Arrow left: Moves to the left bubble</p>
+                    <p>Arrow right: Moves to the right bubble</p>
+                </div>
+            </section>
+        </div>
+
+        <section id="menu">
+            <main>
+                <h1>Choose the type of operations</h1>
+                <div id="operationButtons">
+                    <button id="btn_sum" class="move">Sum</button>
+                    <button id="btn_multiplication" class="move">Multiplication</button>
+                    <button id="btn_equation" class="move">Equation</button>
+                </div>
+
+                <form id="form_radio">
+                    <input type="radio" name="input_level" class="input_level" value="easy" checked>Easy
+                    <input type="radio" name="input_level" class="input_level" value="normal">Normal
+                    <input type="radio" name="input_level" class="input_level" value="hard">Hard
+                </form>
+            </main>
+        </section>
+
+        <div id="points_all">
+            <h1>Scores</h1>
+            <div id="divBody">
+                <div class="lateral">
+                    <button id="btn_playAgain" class="move">Play again</button>
+                </div>
+                <div id="center">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Player</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>1</td>
+                            <td class="tagName">Jugador1</td>
+                            <td class="right_table">10000</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="tagName">Jugador2</td>
+                            <td class="right_table">9000</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="tagName">Jugador3</td>
+                            <td class="right_table">5460</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="tagName">Jugador4</td>
+                            <td class="right_table">5000</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="tagName">Jugador5</td>
+                            <td class="right_table">4000</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="tagName">Jugador6</td>
+                            <td class="right_table">548</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td class="tagName">Jugador7</td>
+                            <td class="right_table">500</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td class="tagName">Jugador8</td>
+                            <td class="right_table">400</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td class="tagName">Jugador9</td>
+                            <td class="right_table">47</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td class="tagName">Jugador10</td>
+                            <td class="right_table">40</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="lateral">
+                    <button id="btn_backToMain" class="move">Exit</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="sectionGame">
+            <div id="container" class="x">
+                <canvas id="slideshow" width="1024" height="768"></canvas>
+                <!--1024,631-->
+                <!--<canvas id="obj" width="256" height="256"></canvas>-->
+                <!--256x2-->
+            </div>
+            <div class="x" id="currentlyStats">
+                <form action="#">
+                    <ul>
+                        <li>
+                            <label for="points">Points</label>
+                            <input type="text" name="points" id="points" readonly>
+                        </li>
+                        <li>
+                            <label for="level">Level</label>
+                            <input type="text" name="level" id="level" readonly>
+                        </li>
+                        <li id="health">
+                        </li>
+                        <li>
+                            <label for="answer">Answer</label>
+                            <div id="signAnswer">
+                                <label for="sign"><i id="sign" class="fas fa-plus"></i></label><input type="text" name="answer" id="answer" readonly>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+
+<script src="js/operation.js?v=1.0" type="text/javascript"></script>
+<script src="js/generatorOperations.js?v=1.0" type="text/javascript"></script>
+<script src="js/positionsOccupiedsOnCanvasScreen.js?v=1.0" type="text/javascript"></script>
+<script src="js/generatorIdBubble.js?v=1.0" type="text/javascript"></script>
+<script src="js/canvasObject.js?v=1.0" type="text/javascript"></script>
+<script src="js/classCanvasScreen.js?v=1.0" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var canvasScreen;
+    var nameUser;
+    var typeOperation;
+    var difficulty;
+    var signInt = 1;
+    var arrayName = new Array(10);
+    var arrayPoints = new Array(10);
+
+    var musicBubbleSum = new Audio('music/musicBubbleSum.wav');
+    musicBubbleSum.loop = true;
+    var musicBubbleMultiplication = new Audio('music/musicBubbleMultiplication.mp3');
+    musicBubbleMultiplication.loop = true;
+    var musicBubbleEquation = new Audio('music/musicBubbleEquation.mp3');
+    musicBubbleEquation.loop = true;
+    var musicLosedViewStatsWin = new Audio('music/musicLosedViewStatsWin.mp3');
+    musicLosedViewStatsWin.loop = true;
+    var musicLosedViewStatsLose = new Audio('music/musicLosedViewStatsLose.mp3');
+    musicLosedViewStatsLose.loop = true;
+
+    $('#btn_accept').click(function(event) {
+        event.preventDefault(); // stopp the event change at click
+        if (!$('#name').is(':invalid')) {
+            nameUser = $('#name').val();
+            $("#divName").hide();
+            $("#menu").show();
+        }
+    });
+
+    $('#btn_sum').click(function(event) {
+        event.preventDefault(); // stopp the event change at click
+        typeOperation = "sum";
+        difficulty = whoLevelIsChecked();
+        $("#menu").hide();
+        activateKeyEventsDuringGame();
+        canvasScreen.initGame(nameUser, typeOperation, difficulty);
+        musicBubbleSum.play();
+    });
+
+    $('#btn_multiplication').click(function(event) {
+        event.preventDefault(); // stopp the event change at click
+        typeOperation = "multiplication";
+        difficulty = whoLevelIsChecked();
+        $("#menu").hide();
+        activateKeyEventsDuringGame();
+        canvasScreen.initGame(nameUser, typeOperation, difficulty);
+        musicBubbleMultiplication.play();
+    });
+
+    $('#btn_equation').click(function(event) {
+        event.preventDefault(); // stopp the event change at click
+        typeOperation = "equation";
+        difficulty = whoLevelIsChecked();
+        $("#menu").hide();
+        activateKeyEventsDuringGame();
+        canvasScreen.initGame(nameUser, typeOperation, difficulty);
+        musicBubbleEquation.play();
+    });
+
+    $('#btn_playAgain').click(function(event) {
+        musicLosedViewStatsWin.pause();
+        musicLosedViewStatsWin.currentTime = 0;
+        musicLosedViewStatsLose.pause();
+        musicLosedViewStatsLose.currentTime = 0;
+        event.preventDefault(); // stopp the event change at click
+        $("#points_all").hide();
+        activateKeyEventsDuringGame();
+        canvasScreen.initGame(nameUser, typeOperation, difficulty);
+        switch (typeOperation) {
+            case 'sum':
+                musicBubbleSum.play();
+                break;
+            case 'multiplication':
+                musicBubbleMultiplication.play();
+                break;
+            case 'equation':
+                musicBubbleEquation.play();
+                break;
+            default:
+                break;
+        }
+    });
+
+    $('#btn_backToMain').click(function(event) {
+        event.preventDefault(); // stopp the event change at click
+        musicLosedViewStatsWin.pause();
+        musicLosedViewStatsWin.currentTime = 0;
+        musicLosedViewStatsLose.pause();
+        musicLosedViewStatsLose.currentTime = 0;
+        $("#menu").show();
+        $("#points_all").hide();
+    });
+
+    function whoLevelIsChecked() {
+
+        var arrayRadios = document.getElementsByClassName('input_level');
+        var value;
+
+        if (arrayRadios[0].checked) {
+            value = arrayRadios[0].value;
+        } else {
+            if (arrayRadios[1].checked) {
+                value = arrayRadios[1].value;
+            } else {
+                if (arrayRadios[2].checked) {
+                    value = arrayRadios[2].value;
+                } else {
+                    console.log("error to get value of input radio");
+                }
+            }
+        }
+        //$('input[input_level]:checked', '#form_radio').val();
+        return value;
+    };
+
+    function generatorInit() {
+        //$(document).ready(function() {});
+
+        // load background
+        oImage = new Image();
+        oImage.src = 'images/background.jpg';
+        oImage.onload = function() {
+            $("#name").show();
+            $("#menu").hide();
+            $("#points_all").hide();
+
+            // creating canvas and context objects
+            //canvas = document.getElementById('slideshow');
+            //ctx = canvas.getContext('2d');
+            //canvasObj = document.getElementById('obj');
+            //ctxObj = canvasObj.getContext('2d');
+
+            str_idBoard = "slideshow";
+            str_idContainer = "container";
+            str_idPoints = "points";
+            canvasScreen = new CanvasScreen(oImage, str_idBoard, str_idContainer, str_idPoints, musicLosedViewStatsWin, musicLosedViewStatsLose);
+
+            /*var gameIsActive = true;
+            Concurrent.Thread.create(function() {
+                setTimeout('canvasScreen.addBubble()', 3000);
+            });
+            */
+
+            // begin updating scene
+            //canvasScreen.updateScene();
+        };
+
+        // objectCanvas
+    };
+
+    //var eatSound = loadSound("soundsEffects/getPoint.wav");
+
+    function eventsKeyDuringGame(event) {
+        //event.key
+        switch (event.code) {
+            case 'Digit0':
+                var value = $('#answer').val();
+                $('#answer').val(value + '0');
+                break;
+            case 'Digit1':
+                var value = $('#answer').val();
+                $('#answer').val(value + '1');
+                break;
+            case 'Digit2':
+                var value = $('#answer').val();
+                $('#answer').val(value + '2');
+                break;
+            case 'Digit3':
+                var value = $('#answer').val();
+                $('#answer').val(value + '3');
+                break;
+            case 'Digit4':
+                var value = $('#answer').val();
+                $('#answer').val(value + '4');
+                break;
+            case 'Digit5':
+                var value = $('#answer').val();
+                $('#answer').val(value + '5');
+                break;
+            case 'Digit6':
+                var value = $('#answer').val();
+                $('#answer').val(value + '6');
+                break;
+            case 'Digit7':
+                var value = $('#answer').val();
+                $('#answer').val(value + '7');
+                break;
+            case 'Digit8':
+                var value = $('#answer').val();
+                $('#answer').val(value + '8');
+                break;
+            case 'Digit9':
+                var value = $('#answer').val();
+                $('#answer').val(value + '9');
+                break;
+            case 'Backspace':
+                var value = $('#answer').val();
+                $('#answer').val(value.slice(0, -1));
+                break;
+            case 'Enter':
+                var str_answer = $('#answer').val();
+                var answer = parseInt(str_answer);
+                answer *= signInt;
+                //analyze and resolve the answer
+                canvasScreen.setAnswer(answer);
+                $('#answer').val('');
+                signInt = 1;
+                $('#sign').removeClass("fas fa-minus").addClass("fas fa-plus");
+                break;
+            case 'Space':
+                if (canvasScreen.takeUpdateSelectBubble()) {
+                    //eatSound.play();
+                    $('#bubbleChangePosition').trigger("play");
+                }
+                break;
+            case 'ArrowUp':
+                if (canvasScreen.takeUpSelectBubble()) {
+                    //eatSound.play();
+                    $('#bubbleChange').trigger("play");
+                }
+                break;
+            case 'ArrowDown':
+                if (canvasScreen.takeDownSelectBubble()) {
+                    //eatSound.play();
+                    $('#bubbleChange').trigger("play");
+                }
+                break;
+            case 'ArrowLeft':
+                if (canvasScreen.takeLeftSelectBubble()) {
+                    //eatSound.play();
+                    $('#bubbleChange').trigger("play");
+                }
+                break;
+            case 'ArrowRight':
+                if (canvasScreen.takeRightSelectBubble()) {
+                    //eatSound.play();
+                    $('#bubbleChange').trigger("play");
+                }
+                break;
+            case 'Slash':
+                if (signInt == 1) {
+                    signInt = -1;
+                    $('#sign').removeClass("fas fa-plus").addClass("fas fa-minus");
+                } else {
+                    signInt = 1;
+                    $('#sign').removeClass("fas fa-minus").addClass("fas fa-plus");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    function activateKeyEventsDuringGame() {
+        document.addEventListener('keydown', eventsKeyDuringGame, false);
+    }
+
+    function deactivateKeyEventsDuringGame() {
+        document.removeEventListener('keydown', eventsKeyDuringGame);
+    }
+
+    /**
+     * this is a custom event. 
+     * This event is called at to use $(document).trigger('funEventFinishGame');
+     * the name funEventFinishGame is a function created to call to custom event
+     */
+
+    $(document).on('funEventFinishGame', function() {
+        var score = parseInt($('#points').val());
+        if (updateStorageScores(score)) {
+            musicLosedViewStatsWin.play();
+        } else {
+            musicLosedViewStatsLose.play();
+        }
+        $("#points_all").show();
+        deactivateKeyEventsDuringGame(); // deactivate key events
+        switch (typeOperation) {
+            case 'sum':
+                musicBubbleSum.pause();
+                musicBubbleSum.currentTime = 0;
+                break;
+            case 'multiplication':
+                musicBubbleMultiplication.pause();
+                musicBubbleMultiplication.currentTime = 0;
+                break;
+            case 'equation':
+                musicBubbleEquation.pause();
+                musicBubbleEquation.currentTime = 0;
+                break;
+            default:
+                break;
+        }
+    });
+
+    function initStorageScores() {
+        arrayName = localStorage.getItem('arrayName');
+        arrayPoints = localStorage.getItem('arrayPoints');
+
+        //arrayName = null; //get restart list score
+
+        if (arrayName == null || arrayPoints == null) {
+            arrayName = new Array(10);
+            arrayPoints = new Array(10);
+            for (var i = 0; i < 10; ++i) {
+                var strName = "anonymous " + (i + 1);
+                var score = (10 - i) * 20;
+                arrayName[i] = strName;
+                arrayPoints[i] = score;
+            }
+
+            localStorage.setItem('arrayName', arrayName);
+            localStorage.setItem('arrayPoints', arrayPoints);
+        }
+
+    }
+
+    function updateStorageScores(score) {
+        arrayName = localStorage.getItem('arrayName');
+        arrayPoints = localStorage.getItem('arrayPoints');
+
+        var nameStats = getArray(arrayName, "str");
+        var pointsStats = getArray(arrayPoints, "int");
+
+        var boolHasWon = false;
+        var auxName;
+        var auxScore;
+
+        if (pointsStats[9] < score) {
+            pointsStats[9] = score;
+            nameStats[9] = nameUser;
+            boolHasWon = true;
+        }
+
+        var i = 8;
+        while (pointsStats[i] < score && i >= 0) {
+            auxScore = pointsStats[i];
+            auxName = nameStats[i];
+            pointsStats[i] = score;
+            nameStats[i] = nameUser;
+            pointsStats[i + 1] = auxScore;
+            nameStats[i + 1] = auxName;
+            --i;
+        }
+
+        localStorage.setItem('arrayName', nameStats);
+        localStorage.setItem('arrayPoints', pointsStats);
+
+        var elementsName = document.getElementsByClassName("tagName");
+        var elementsScore = document.getElementsByClassName("right_table");
+
+        for (var j = 0; j < 10; ++j) {
+            elementsName[j].innerHTML = nameStats[j];
+            elementsScore[j].innerHTML = pointsStats[j];
+            elementsName[j].classList.remove('movement');
+        }
+
+        if (boolHasWon) {
+            elementsName[i + 1].classList.add('movement');
+        }
+
+        return boolHasWon;
+
+    }
+
+    function getArray(arrayStorage, string) {
+
+        var array = new Array(10);
+
+        if (string == 'int') {
+            for (var i = 0; i < 9; ++i) {
+                var index = arrayStorage.indexOf(',');
+                var number = arrayStorage.substring(0, index);
+                array[i] = parseInt(number);
+                arrayStorage = arrayStorage.substring(index + 1, arrayStorage.length);
+            }
+            array[9] = arrayStorage;
+        } else {
+            for (var i = 0; i < 9; ++i) {
+                var index = arrayStorage.indexOf(',');
+                array[i] = arrayStorage.substring(0, index);
+                arrayStorage = arrayStorage.substring(index + 1, arrayStorage.length);
+            }
+            array[9] = arrayStorage;
+        }
+
+
+        return array;
+    }
+
+    window.onload = function() {
+        initStorageScores();
+        var generatorOperations = new GeneratorOperations();
+        generatorInit();
+    };
+</script>
+
+</html>
